@@ -1,7 +1,8 @@
 import React from "react";
 import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope } from "react-icons/fa";
 import { SiNextdotjs, SiMongodb, SiDocker, SiKubernetes, SiTensorflow, SiTailwindcss } from "react-icons/si";
-import ProfilePic from "../assets/ProfilePic.jpeg";
+import ProfilePic from "../assets/ProfilePic.webp";
+
 
 export default function About() {
   return (
@@ -14,16 +15,21 @@ export default function About() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(0,255,204,0.08)_0%,_transparent_70%)]"></div>
 
         {/* ================= IMAGE (Responsive) ================= */}
-        <div className="relative w-[280px] sm:w-[360px] md:w-[420px] h-[380px] sm:h-[480px] md:h-[540px] rounded-3xl overflow-hidden border border-teal-400/30 shadow-[0px_0px_45px_10px_rgba(0,255,200,0.1)]">
-          <img
-            src={ProfilePic}
-            alt="Harsh Shah"
-            className="w-full h-full object-cover brightness-[0.82] hover:brightness-100 transition duration-700"
-          />
+       <div className="relative w-[280px] sm:w-[360px] md:w-[420px] h-[380px] sm:h-[480px] md:h-[540px] rounded-3xl overflow-hidden border border-teal-400/30 shadow-[0px_0px_45px_10px_rgba(0,255,200,0.1)] group">
 
-          {/* neon strip overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-300/10 to-transparent"></div>
-        </div>
+  <img  
+    src={ProfilePic}  
+    srcSet={`${ProfilePic} 1x, ${ProfilePic} 2x`}
+    loading="lazy"
+    sizes="(max-width:768px) 60vw, 30vw"
+    className="w-full h-full object-cover brightness-[0.82] transition-all duration-700 
+               blur-sm group-hover:blur-0"
+    alt="Harsh Shah"
+  />
+
+  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-300/10 to-transparent"></div>
+</div>
+
 
         {/* ================= TEXT ================= */}
         <div className="max-w-xl text-center md:text-left relative">
