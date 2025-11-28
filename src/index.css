@@ -1,10 +1,144 @@
-
 body{
-    background: #12161a;
+  background: #12161a;
 }
 
 @tailwind base;
-
-  @tailwind components;
 @tailwind components;
 @tailwind utilities;
+
+/* ========== NETFLIX-STYLE CUSTOM CSS ========== */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
+}
+
+/* Netflix-style smooth scrolling */
+html {
+scroll-behavior: smooth;
+}
+
+/* Custom selection to match Netflix red */
+::selection {
+background: #e50914;
+color: white;
+}
+
+/* Netflix-style focus rings */
+button:focus-visible, 
+a:focus-visible {
+outline: 2px solid #e50914;
+outline-offset: 2px;
+}
+
+/* Smooth transitions for all interactive elements */
+button, 
+a,
+.project-card {
+transition: all 0.3s ease;
+}
+
+/* Custom animation for loading states */
+@keyframes netflix-glow {
+0% {
+  box-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+}
+50% {
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.8);
+}
+100% {
+  box-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+}
+}
+
+.netflix-glow {
+animation: netflix-glow 2s ease-in-out infinite;
+}
+
+/* Hover effects for cards */
+.project-card:hover {
+transform: scale(1.05);
+z-index: 10;
+}
+
+/* Netflix-style gradient overlays */
+.gradient-overlay {
+background: linear-gradient(
+  to bottom,
+  transparent 0%,
+  rgba(0, 0, 0, 0.1) 20%,
+  rgba(0, 0, 0, 0.3) 40%,
+  rgba(0, 0, 0, 0.5) 60%,
+  rgba(0, 0, 0, 0.7) 80%,
+  rgba(0, 0, 0, 0.9) 100%
+);
+}
+
+/* Custom scrollbar for modal (when needed) */
+.modal-scroll::-webkit-scrollbar {
+width: 8px;
+}
+
+.modal-scroll::-webkit-scrollbar-track {
+background: #1a1a1a;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb {
+background: #e50914;
+border-radius: 4px;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb:hover {
+background: #f40612;
+}
+
+/* Netflix-style text gradients */
+.text-gradient-netflix {
+background: linear-gradient(135deg, #e50914 0%, #f40612 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+/* Loading skeleton animation */
+@keyframes skeleton-loading {
+0% {
+  background-color: #2d2d2d;
+}
+50% {
+  background-color: #3d3d3d;
+}
+100% {
+  background-color: #2d2d2d;
+}
+}
+
+.skeleton {
+animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+/* Ensure black background for Netflix theme */
+.netflix-bg {
+background-color: #000000;
+}
+
+/* Backdrop blur support */
+@supports (backdrop-filter: blur(10px)) {
+.backdrop-blur-netflix {
+  backdrop-filter: blur(10px);
+}
+}
+
+/* Mobile responsiveness helpers */
+@media (max-width: 768px) {
+.netflix-mobile-padding {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+}
