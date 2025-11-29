@@ -58,8 +58,8 @@ export default function ContactUs() {
           </h1>
 
           <p className="text-gray-300 mt-3 sm:mt-4 max-w-md mx-auto md:mx-0 text-base sm:text-lg">
-            Have an idea or opportunity?  
-            Send a message — I personally reply to every one.
+           Whether it’s work, collaboration, or an idea worth exploring 
+my inbox is open
           </p>
 
           {/* Info Cards */}
@@ -67,7 +67,7 @@ export default function ContactUs() {
             <InfoCard icon={<Mail />} title="Email" value="harshshah9848@gmail.com" link="mailto:harshshah9848@gmail.com" />
             <InfoCard icon={<Phone />} title="Phone" value="Available on request" />
             <InfoCard icon={<MapPin />} title="Location" value="India — Remote Friendly" />
-            <InfoCard icon={<Clock />} title="Available" value="Mon–Sat 9AM–10PM" />
+           
           </div>
 
           {/* Social Icons */}

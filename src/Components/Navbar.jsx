@@ -72,7 +72,7 @@ const Navbar = () => {
                          shadow-[0_0_25px_rgba(70,135,145,0.5)]
                          transition-all duration-300"
             >
-              Hire Me 🚀
+              Lets Connect 🚀
             </Link>
           </div>
         </div>

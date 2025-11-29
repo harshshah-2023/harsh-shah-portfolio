@@ -40,10 +40,9 @@ export default function About() {
           </h1>
 
           <p className="text-gray-300 text-base sm:text-lg leading-relaxed mt-5">
-            A full-stack engineer specialising in 
-            <span className="text-teal-300 font-semibold"> Web-Dev, DevOps & AI-ML pipelines. </span>
-            I build products end-to-end — from frontend UI to backend architecture, 
-            container orchestration, cloud infra & ML model deployment.
+           I engineer across the stack 
+            <span className="text-teal-300 font-semibold"> Web-Dev, DevOps, Cloud & AI-ML pipelines. </span>
+            From frontend experiences to backend systems, from CI/CD automation to ML inference at scale, building solutions that move fast, deploy seamlessly, and solve real-world problems.
           </p>
 
           <div className="h-[2px] w-32 sm:w-40 bg-teal-500 mt-5 sm:mt-6 shadow-[0_0_18px_teal] rounded-full"></div>
