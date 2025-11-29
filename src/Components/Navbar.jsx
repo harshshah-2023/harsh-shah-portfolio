@@ -6,46 +6,78 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 py-4 px-6
-                    text-white flex items-center justify-between 
-                    backdrop-blur-md bg-black/40 border-b border-white/10">
+    <>
+      {/* ================= TOP NAV ================= */}
+      <nav className="fixed top-0 left-0 w-full z-50 flex items-center justify-between 
+                      py-4 px-6 text-white backdrop-blur-xl bg-black/30 border-b border-white/10">
 
-      {/* LOGO */}
-      <Link to="/">
-        <h1 className="text-4xl font-serif cursor-pointer">
-          Harsh<span className="text-[rgb(70,135,145)]">shah</span>
-        </h1>
-      </Link>
+        {/* LOGO */}
+        <Link to="/" onClick={() => setOpen(false)}>
+          <h1 className="text-4xl font-serif cursor-pointer">
+            Harsh<span className="text-[rgb(70,135,145)]">shah</span>
+          </h1>
+        </Link>
 
-      {/* ================= DESKTOP MENU ================= */}
-      <div className="hidden md:flex pr-10 space-x-10 text-xl font-medium">
-        <Link to='/Projects' className="hover:text-[rgb(70,135,145)]">Projects</Link>
-        <Link to='/Contact' className="hover:text-[rgb(70,135,145)]">Contact</Link>
-        <Link to='/About' className="hover:text-[rgb(70,135,145)]">About</Link>
-        <Link to='/Resume' className="hover:text-[rgb(70,135,145)]">Resume</Link>
-        <Link to='/Blog' className="hover:text-[rgb(70,135,145)]">Blog</Link>
-      </div>
+        {/* DESKTOP MENU */}
+        <div className="hidden md:flex pr-12 space-x-12 text-lg font-medium tracking-wide">
+          {["Projects","Contact","About","Resume","Blog"].map((item,i)=>(
+            <Link 
+              key={i} 
+              to={`/${item}`}
+              className="hover:text-[rgb(70,135,145)] transition"
+            >{item}</Link>
+          ))}
+        </div>
 
-      {/* ================= MOBILE MENU ICON ================= */}
-      <div className="md:hidden cursor-pointer" onClick={() => setOpen(!open)}>
-        {open ? <X size={28}/> : <Menu size={28}/>}
-      </div>
+        {/* MOBILE MENU ICON */}
+        <button
+          className="md:hidden p-2 text-white hover:scale-110 transition"
+          onClick={() => setOpen(true)}
+        >
+          <Menu size={32}/>
+        </button>
+      </nav>
 
-      {/* ================= MOBILE SLIDE NAV ================= */}
-      <div className={`
-        fixed top-0 right-0 h-full w-64 bg-black/90 backdrop-blur-lg 
-        border-l border-white/10 p-8 pt-20 flex flex-col space-y-6 text-xl
-        transform transition-all duration-300 md:hidden
-        ${open ? "translate-x-0" : "translate-x-full"}
-      `}>
-        <Link to='/Projects'   onClick={() => setOpen(false)} className="hover:text-[rgb(70,135,145)]">Projects</Link>
-        <Link to='/Contact' onClick={() => setOpen(false)} className="hover:text-[rgb(70,135,145)]">Contact</Link>
-        <Link to='/About'   onClick={() => setOpen(false)} className="hover:text-[rgb(70,135,145)]">About</Link>
-        <Link to='/Resume'  onClick={() => setOpen(false)} className="hover:text-[rgb(70,135,145)]">Resume</Link>
-        <Link to='/Blog'    onClick={() => setOpen(false)} className="hover:text-[rgb(70,135,145)]">Blog</Link>
-      </div>
+      {/* ================= PREMIUM FULLSCREEN MOBILE NAV ================= */}
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center 
+                        bg-black/80 backdrop-blur-xl animate-fadeIn">
+          
+          {/* Close */}
+          <button 
+            onClick={() => setOpen(false)}
+            className="absolute top-6 right-6 text-gray-300 hover:text-[rgb(70,135,145)] transition"
+          ><X size={34}/></button>
 
-    </nav>
+          {/* Center Menu */}
+          <div className="text-center space-y-8">
+            {["Projects","Contact","About","Resume","Blog"].map((page,i)=>(
+              <Link 
+                key={i}
+                to={`/${page}`}
+                onClick={() => setOpen(false)}
+                className="block text-3xl font-light text-gray-200 tracking-wide
+                           hover:text-[rgb(70,135,145)] hover:scale-110 transition duration-300"
+              >
+                {page}
+              </Link>
+            ))}
+
+            {/* CTA */}
+            <Link 
+              to="/Contact"
+              onClick={() => setOpen(false)}
+              className="inline-block mt-6 px-8 py-3 rounded-full border border-[rgb(70,135,145)]
+                         hover:bg-[rgb(70,135,145)] hover:text-black text-gray-200
+                         shadow-[0_0_25px_rgba(70,135,145,0.5)]
+                         transition-all duration-300"
+            >
+              Hire Me 🚀
+            </Link>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

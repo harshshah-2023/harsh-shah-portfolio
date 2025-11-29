@@ -28,16 +28,22 @@ export default function Resume() {
           Full-Stack | DevOps | AI/ML I architect systems where performance meets prediction, and automation replaces human friction.
         </p>
 
-        <a
-          href={resumePDF}
-          download="HarshShah_Resume.pdf"
-          className="inline-flex items-center gap-3 mt-8 px-8 py-3 
-                     text-lg font-semibold rounded-xl border border-[rgb(70,135,145)]
-                     hover:bg-[rgb(70,135,145)] hover:text-white shadow-[0_0_15px_rgba(70,135,145,0.4)]
-                     transition-all duration-300"
-        >
-          <FileDown /> Download Resume
-        </a>
+       <a
+  onClick={() => {
+    const link = document.createElement("a");
+    link.href = resumePDF;
+    link.download = "HarshShah_Resume.pdf"; // forces save dialog on mobile
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }}
+  className="inline-flex items-center gap-3 mt-8 px-8 py-3 
+             text-lg font-semibold rounded-xl border border-[rgb(70,135,145)]
+             hover:bg-[rgb(70,135,145)] hover:text-white shadow-[0_0_15px_rgba(70,135,145,0.4)]
+             transition-all duration-300 cursor-pointer"
+>
+  <FileDown /> Download Resume
+</a>
       </motion.div>
 
 
