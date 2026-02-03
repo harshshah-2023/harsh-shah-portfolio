@@ -3,8 +3,9 @@ import React from 'react';
 const ProjectHero = ({ project, onInfo }) => {
   return (
     <section className="relative h-screen flex items-center justify-start bg-gradient-to-r from-black via-black/90 to-transparent">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
+      
+      {/* Background Image (FIXED: pointer-events disabled) */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div 
           className="w-full h-full bg-cover bg-center"
           style={{ backgroundImage: `url(${project.heroImage})` }}
@@ -15,7 +16,8 @@ const ProjectHero = ({ project, onInfo }) => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 mt-16">
         <div className="max-w-xl">
-          {/* Logo/Title */}
+          
+          {/* Logo / Title */}
           <div className="flex items-center gap-3 mb-4">
             <span className="text-2xl bg-black/50 backdrop-blur-sm p-2 rounded-lg border border-white/20">
               {project.logo}
@@ -31,7 +33,9 @@ const ProjectHero = ({ project, onInfo }) => {
               <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
               {project.metrics?.accuracy || "High Performance"}
             </span>
-            <span className="border border-gray-400 px-2 py-0.5 rounded-full text-xs">{project.maturityRating}</span>
+            <span className="border border-gray-400 px-2 py-0.5 rounded-full text-xs">
+              {project.maturityRating}
+            </span>
             <span className="text-xs">{project.year}</span>
             <span className="bg-red-600/20 text-red-400 px-2 py-0.5 rounded-full border border-red-600/30 text-xs">
               {project.metrics?.stations || project.metrics?.recovery || project.metrics?.scale || "Large Scale"}
@@ -43,7 +47,7 @@ const ProjectHero = ({ project, onInfo }) => {
             {project.fullDescription}
           </p>
 
-          {/* Tech Stack Tags */}
+          {/* Tech Stack */}
           <div className="flex flex-wrap gap-2 mb-6">
             {project.technologies.slice(0, 6).map((tech, index) => (
               <span 
@@ -57,8 +61,13 @@ const ProjectHero = ({ project, onInfo }) => {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3 flex-wrap">
+            
+            {/* Project Details */}
             <button 
-              onClick={onInfo}
+              onClick={(e) => {
+                e.stopPropagation();
+                onInfo();
+              }}
               className="flex items-center gap-2 bg-gray-600/70 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-500/70 transition-all duration-300 border border-gray-500 hover:border-white/50 text-sm"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,12 +76,13 @@ const ProjectHero = ({ project, onInfo }) => {
               Project Details
             </button>
 
-            {/* SHOW LIVE DEMO BUTTON ONLY FOR PROJECTS WITH HASLIVEDEMO = TRUE */}
+            {/* Live Demo */}
             {project.hasLiveDemo && project.liveUrl && (
               <a 
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-2 bg-green-600/70 backdrop-blur-sm text-white px-5 py-3 rounded-lg font-semibold hover:bg-green-500/70 transition-all duration-300 border border-green-500 text-sm"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -82,12 +92,13 @@ const ProjectHero = ({ project, onInfo }) => {
               </a>
             )}
 
-            {/* ALWAYS SHOW GITHUB BUTTON IF URL EXISTS */}
+            {/* View Code */}
             {project.githubUrl && (
               <a 
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-2 bg-gray-800/70 backdrop-blur-sm text-white px-5 py-3 rounded-lg font-semibold hover:bg-gray-700/70 transition-all duration-300 border border-gray-600 text-sm"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -101,7 +112,7 @@ const ProjectHero = ({ project, onInfo }) => {
       </div>
 
       {/* Bottom Gradient */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent z-10"></div>
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent z-10 pointer-events-none"></div>
     </section>
   );
 };
