@@ -1,28 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const ProjectHero = ({ project, onPlay, onInfo }) => {
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-
+const ProjectHero = ({ project, onInfo }) => {
   return (
     <section className="relative h-screen flex items-center justify-start bg-gradient-to-r from-black via-black/90 to-transparent">
-      {/* Background Video/Image */}
+      {/* Background Image */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {isVideoPlaying && project.trailerVideo ? (
-          <video
-            autoPlay
-            muted
-            loop
-            className="w-full h-full object-cover"
-            poster={project.heroImage}
-          >
-            <source src={project.trailerVideo} type="video/mp4" />
-          </video>
-        ) : (
-          <div 
-            className="w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${project.heroImage})` }}
-          ></div>
-        )}
+        <div 
+          className="w-full h-full bg-cover bg-center"
+          style={{ backgroundImage: `url(${project.heroImage})` }}
+        ></div>
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
       </div>
 
@@ -43,12 +29,12 @@ const ProjectHero = ({ project, onPlay, onInfo }) => {
           <div className="flex items-center gap-3 mb-4 text-sm flex-wrap">
             <span className="text-green-500 font-semibold flex items-center gap-1">
               <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-              {project.metrics.performance} Match
+              {project.metrics?.accuracy || "High Performance"}
             </span>
             <span className="border border-gray-400 px-2 py-0.5 rounded-full text-xs">{project.maturityRating}</span>
             <span className="text-xs">{project.year}</span>
             <span className="bg-red-600/20 text-red-400 px-2 py-0.5 rounded-full border border-red-600/30 text-xs">
-              {project.metrics.scale}
+              {project.metrics?.stations || project.metrics?.recovery || project.metrics?.scale || "Large Scale"}
             </span>
           </div>
 
@@ -72,19 +58,6 @@ const ProjectHero = ({ project, onPlay, onInfo }) => {
           {/* Action Buttons */}
           <div className="flex items-center gap-3 flex-wrap">
             <button 
-              onClick={() => {
-                setIsVideoPlaying(true);
-                onPlay();
-              }}
-              className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 shadow-2xl text-sm"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-              Play Demo
-            </button>
-            
-            <button 
               onClick={onInfo}
               className="flex items-center gap-2 bg-gray-600/70 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-500/70 transition-all duration-300 border border-gray-500 hover:border-white/50 text-sm"
             >
@@ -94,6 +67,22 @@ const ProjectHero = ({ project, onPlay, onInfo }) => {
               Project Details
             </button>
 
+            {/* SHOW LIVE DEMO BUTTON ONLY FOR PROJECTS WITH HASLIVEDEMO = TRUE */}
+            {project.hasLiveDemo && project.liveUrl && (
+              <a 
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-green-600/70 backdrop-blur-sm text-white px-5 py-3 rounded-lg font-semibold hover:bg-green-500/70 transition-all duration-300 border border-green-500 text-sm"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+                Live Demo
+              </a>
+            )}
+
+            {/* ALWAYS SHOW GITHUB BUTTON IF URL EXISTS */}
             {project.githubUrl && (
               <a 
                 href={project.githubUrl}
