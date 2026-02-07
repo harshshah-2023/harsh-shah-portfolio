@@ -32,6 +32,7 @@ The site highlights my projects, technical expertise, and experience building **
 - Optimized for desktop and mobile devices
 
 ---
+ ```
 
 ## 📂 Project Structure
 ├── public/
@@ -45,6 +46,7 @@ The site highlights my projects, technical expertise, and experience building **
 ├── index.html
 ├── vite.config.js
 └── package.json
+ ```
 
 
 ---
@@ -68,6 +70,7 @@ Production Build
 npm run build
 Preview Build
 npm run preview
+ ```
 ⚡ Vite + React Setup
 This project uses Vite for fast builds and HMR with React support.
 
@@ -84,4 +87,4 @@ LinkedIn: https://www.linkedin.com/in/harsh-shah-9848hs
 
 Email: harshshah9848@gmail.com
 
-<p align="center"><i>Always learning. Always shipping.</i></p> ```
+<p align="center"><i>Always learning. Always shipping.</i></p>
