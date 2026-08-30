@@ -1,48 +1,62 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import QuoteSeaction from "../Components/QuoteSeaction";
 import DevOpsWebDevShowcase from "../Components/DevOpsWebDevShowcase";
-import Testimonial from "../Components/Testimonial";
-import heroMain from "../assets/heMainpic1.webp";
-import { Link } from "react-router-dom";
+import heroMain from "../assets/heroMain-1400.webp";
+import heroMainSmall from "../assets/heroMain-800.webp";
 
 const Home = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-ink-900">
 
       {/* ================= HERO ================= */}
-      <section className="w-full min-h-screen px-6 lg:px-16 pt-28 flex flex-col lg:flex-row items-center justify-between text-white">
+      <section className="w-full min-h-screen px-6 lg:px-16 pt-32 pb-24 flex flex-col lg:flex-row items-center justify-between gap-16">
 
         {/* LEFT TEXT */}
         <div className="max-w-2xl text-center lg:text-left">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight">
-            Hi, I'm <br />
-            <span className="text-[rgb(70,135,145)]">Harsh Shah</span>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif text-mist-50">
+            Hi, I&apos;m <br />
+            <span className="text-accent-500">Harsh Shah</span>
           </h1>
 
-          <p className="text-2xl md:text-3xl font-light mt-2">
-            A Software Developer
+          <p className="mt-6 text-2xl md:text-3xl font-light text-mist-200">
+            Software Product Engineer
           </p>
 
-          <p className="text-lg md:text-xl font-extralight mt-4 opacity-90">
+          <p className="mt-6 max-w-measure-sm mx-auto lg:mx-0 text-lg font-light text-mist-400">
             Step into a world where code transforms ideas into reality.
             Welcome to my portfolio.
           </p>
 
-          <Link to="/Projects">
-            <button className="mt-6 px-7 py-3 border border-white rounded-full 
-              hover:bg-[rgb(70,135,145)] hover:border-none hover:text-black transition">
+          <Link to="/projects">
+            <button className="mt-8 inline-flex items-center rounded-lg border border-white/20
+                       px-8 py-3 text-sm font-semibold tracking-[0.08em] text-mist-100
+                       shadow-e2 transition duration-200 ease-soft
+                       hover:-translate-y-0.5 hover:border-transparent
+                       hover:bg-accent-500 hover:text-ink-950 hover:shadow-glow-lg">
               CHECKOUT MY WORK
             </button>
           </Link>
         </div>
 
         {/* RIGHT HERO IMAGE */}
-        <div className="mt-10 lg:mt-0 w-full flex justify-center lg:w-[50%]">
-          <img 
-            src={heroMain} 
-            className="w-[95%] max-w-[900px] rounded-xl shadow-2xl drop-shadow-xl 
-                      hover:scale-[1.02] transition duration-500"
-            alt="Project collage"
+        <div className="w-full flex justify-center lg:w-[50%]">
+          {/*
+            This is the LCP element, so it is eager + high priority and carries
+            intrinsic dimensions to reserve its box (no layout shift on load).
+            Two widths are served so phones don't download the desktop asset.
+          */}
+          <img
+            src={heroMain}
+            srcSet={`${heroMainSmall} 800w, ${heroMain} 1400w`}
+            sizes="(max-width: 1024px) 95vw, 45vw"
+            width={1400}
+            height={1120}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            className="w-[95%] max-w-[900px] h-auto rounded-2xl ring-1 ring-white/[0.08]
+                       shadow-e4 transition duration-500 ease-soft hover:-translate-y-1"
+            alt="Collage of projects built by Harsh Shah"
           />
         </div>
 
@@ -51,7 +65,7 @@ const Home = () => {
       {/* ================= BELOW CONTENT ================= */}
       <QuoteSeaction />
       <DevOpsWebDevShowcase />
-     
+
     </div>
   );
 };

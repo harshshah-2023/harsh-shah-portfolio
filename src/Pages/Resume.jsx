@@ -1,52 +1,78 @@
-import React from "react";
 import { motion } from "framer-motion";
-import resmePDF2 from "../assets/fullStack_harshshah_resume.pdf"
-import { FileDown, Briefcase, GraduationCap, Layers, BrainCircuit } from "lucide-react";
+import resumePDF from "../assets/fullStack_harshshah_resume.pdf";
+import { FileDown, Briefcase, GraduationCap, Layers, BrainCircuit, Award } from "lucide-react";
 
 export default function Resume() {
 
   const primary = "rgb(70,135,145)";
 
   return (
-    <div className="min-h-screen bg-[#05090d] text-white px-6 sm:px-12 lg:px-32 py-32 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-ink-900 px-6 sm:px-8 md:px-16 lg:px-24 py-32 font-sans relative overflow-hidden">
+      {/* Reading column. Every other page caps its content (max-w-6xl/7xl);
+          this one did not, so cards ran full-bleed while their copy stopped
+          at the 75ch measure and left the right half of each card empty. */}
+      <div className="max-w-6xl mx-auto">
 
       {/* ======= BACKGROUND GLOW UI ======= */}
-      <div className="absolute top-0 left-0 w-[450px] h-[450px] bg-[rgb(70,135,145)] blur-[200px] opacity-25" />
-      <div className="absolute bottom-0 right-0 w-[450px] h-[450px] bg-teal-500 blur-[200px] opacity-25" />
+      {/* Radial gradients instead of blur-[200px]: a 200px blur filter makes the
+          browser rasterise and re-composite a huge surface on every scroll and
+          hover frame, which is what made this page feel heavy. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 left-0 w-[450px] h-[450px] opacity-[0.18]"
+        style={{ background: "radial-gradient(circle, rgb(70,135,145) 0%, transparent 70%)" }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 right-0 w-[450px] h-[450px] opacity-[0.18]"
+        style={{ background: "radial-gradient(circle, #5DA4B1 0%, transparent 70%)" }}
+      />
 
       {/* ======= HEADER ======= */}
       <motion.div 
         initial={{ opacity: 0, y:20 }} 
         animate={{ opacity:1, y:0 }} 
         transition={{ duration:.8 }} 
-        className="text-center mb-20"
+        className="text-center"
       >
-        <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight">
-          Harsh <span className="text-[rgb(70,135,145)]">Shah</span>
+        <h1 className="text-5xl sm:text-6xl font-bold">
+          Harsh <span className="text-accent-500">Shah</span>
         </h1>
-        <p className="mt-4 text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
-          Senior Full-Stack Engineer & AI Systems Architect | Cloud Infrastructure | Platform Engineering | Production ML Systems
+        <p className="mt-6 text-mist-400 text-base max-w-measure mx-auto">
+          Software Product Engineer / Software Engineer | End-to-End Product Development | System Architecture &amp; Design | Cloud &amp; Platform Engineering
         </p>
 
-     {/* <a
-  href={resmePDF2}
-  download="HarshShah_Resume.pdf"
-  className="inline-flex items-center gap-3 mt-8 px-8 py-3 
-             text-lg font-semibold rounded-xl border border-[rgb(70,135,145)]
-             hover:bg-[rgb(70,135,145)] hover:text-white
-             shadow-[0_0_15px_rgba(70,135,145,0.4)]
-             transition-all duration-300 cursor-pointer"
->
-  <FileDown /> Download Resume
-</a> */}
+        <a
+          href={resumePDF}
+          download="HarshShah_Resume.pdf"
+          className="inline-flex items-center gap-2 mt-8 px-8 py-3
+                     text-base font-semibold rounded-lg border border-accent-500/60
+                     text-mist-100 shadow-e2 transition duration-200 ease-soft
+                     hover:-translate-y-0.5 hover:bg-accent-500 hover:text-ink-950
+                     hover:shadow-glow-lg cursor-pointer"
+        >
+          <FileDown aria-hidden="true" /> Download Resume
+        </a>
       </motion.div>
 
 
       {/* ===================================== EXPERIENCE ===================================== */}
       <SectionTitle icon={<Briefcase />} title="Professional Experience" accent={primary} />
 
-      <div className="space-y-7">
+      <div className="space-y-6">
         {[
+          {
+            role: "Jr. Product Engineer — Autoplant System Private Limited",
+            date: "April 2026 – Present",
+            current: true,
+            pts: [
+              "Own end-to-end development of a Field Operations Management System — from PRD authoring through system architecture, system design, and hands-on implementation.",
+              "Translate business and field requirements into product requirement documents, then into the technical architecture and delivery plan the build runs on.",
+              "Design the system: service boundaries, data models, integration contracts and operational workflows for multi-site field operations.",
+              "Implement the platform across the stack, taking features from specification to production release.",
+              "Act as the single point of accountability for the product's technical direction, delivery timeline and post-release iteration."
+            ]
+          },
           {
             role: "Associate Software Engineer — AB Enterprise",
             date: "Jan 2025 – Nov 2025",
@@ -73,8 +99,17 @@ export default function Resume() {
         ].map((job,i)=>(
           <Card key={i}>
             <h3 className="text-xl sm:text-2xl font-bold">{job.role}</h3>
-            <p className="text-gray-400 text-sm sm:text-base mt-1">{job.date}</p>
-            <ul className="mt-4 ml-5 list-disc text-gray-300 space-y-1 text-base">
+            <div className="flex flex-wrap items-center gap-4 mt-2">
+              <p className="tabular text-mist-500 text-sm">{job.date}</p>
+              {job.current && (
+                <span className="flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full
+                                 bg-accent-500/[0.12] text-accent-300 border border-accent-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-400" />
+                  Current
+                </span>
+              )}
+            </div>
+            <ul className="mt-6 ml-4 list-disc marker:text-accent-500/60 text-mist-400 space-y-2 text-sm sm:text-base max-w-measure-lg">
               {job.pts.map((p,j)=><li key={j}>{p}</li>)}
             </ul>
           </Card>
@@ -85,7 +120,7 @@ export default function Resume() {
       {/* ===================================== PROJECTS ===================================== */}
       <SectionTitle icon={<Layers />} title="Architectural Projects" accent={primary} />
 
-      <div className="grid sm:grid-cols-2 gap-8 mt-6">
+      <div className="grid sm:grid-cols-2 gap-6">
         {[
           {
             title: "MahaKavach - Enterprise-Scale Smart City Infrastructure Platform",
@@ -106,7 +141,7 @@ export default function Resume() {
         ].map((proj,i)=>(
           <Card key={i}>
             <h3 className="text-xl font-semibold">{proj.title}</h3>
-            <ul className="ml-5 list-disc text-gray-300 mt-3 space-y-1">
+            <ul className="ml-4 list-disc marker:text-accent-500/60 text-mist-400 text-sm mt-4 space-y-2">
               {proj.points.map((p,j)=><li key={j}>{p}</li>)}
             </ul>
           </Card>
@@ -117,7 +152,7 @@ export default function Resume() {
       {/* ===================================== SKILLS ===================================== */}
       <SectionTitle icon={<BrainCircuit />} title="Technical Architecture & Expertise" accent={primary} />
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {[
           "System Design & Architecture",
           "Microservices & Distributed Systems",
@@ -137,13 +172,13 @@ export default function Resume() {
       </div>
 
        {/* ===================================== ACHIEVEMENTS ===================================== */}
-      <SectionTitle icon={<award className="w-6 h-6" />} title="Achievements" accent={primary} />
+      <SectionTitle icon={<Award className="w-6 h-6" />} title="Achievements" accent={primary} />
 
       <Card>
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h3 className="text-xl font-semibold">🏆 1st Place Winner — Intra University Engineering Day Competition</h3>
-            <p className="text-gray-300 mt-1">
+            <p className="text-mist-400 text-sm mt-2 max-w-measure">
               Awarded for developing a cloud-based IoT integrated full-stack system featuring real-time data processing, 
               device management dashboard, and predictive analytics using machine learning
             </p>
@@ -152,9 +187,10 @@ export default function Resume() {
             href="https://www.linkedin.com/posts/harsh-shah-9848hs_engineeringday-innovation-iot-activity-7382267970267508736-ez37?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD3nXAoBNEekk4L3T3FgtjZSBXlmAIuru6Y" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="px-4 py-2 rounded-lg border border-[rgb(70,135,145)] text-[rgb(70,135,145)] 
-                     hover:bg-[rgb(70,135,145)] hover:text-white transition-all duration-300 
-                     whitespace-nowrap flex items-center gap-2"
+            className="px-4 py-3 rounded-lg border border-accent-500/60 text-accent-300
+                     shadow-e1 transition duration-200 ease-soft
+                     hover:-translate-y-0.5 hover:bg-accent-500 hover:text-ink-950 hover:shadow-glow
+                     whitespace-nowrap flex items-center gap-2 text-sm font-medium"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -169,12 +205,13 @@ export default function Resume() {
       <SectionTitle icon={<GraduationCap />} title="Education" accent={primary} />
 
       <Card>
-        <p className="text-xl pb-2 font-semibold">Bachelor of Technology — Computer Engineering</p>
-        <p className="text-gray-300">Amity University — Graduation 2026</p>
-        <p className="mt-2 text-gray-400">Higher Secondary: 91.67% | Secondary: 82.40%</p>
+        <p className="text-xl mb-2 font-semibold">Bachelor of Technology — Computer Engineering</p>
+        <p className="text-mist-300">Amity University — Graduation 2026</p>
+        <p className="mt-4 text-sm text-mist-500 tabular">Higher Secondary: 91.67% | Secondary: 82.40%</p>
       </Card>
 
-      <div className="pb-20" />
+      <div className="pb-24" />
+      </div>
     </div>
   );
 }
@@ -189,7 +226,7 @@ const SectionTitle = ({ icon, title, accent }) => (
     initial={{ opacity:0, y:20}} 
     whileInView={{ opacity:1, y:0}} 
     viewport={{ once:true }} 
-    className="text-3xl sm:text-4xl font-bold mb-10 flex items-center gap-3 border-l-4 pl-3"
+    className="text-3xl sm:text-4xl font-bold mt-24 mb-8 flex items-center gap-4 border-l-2 pl-4"
     style={{ borderColor: accent }}
   >
     <span style={{ color: accent }}>{icon}</span> {title}
@@ -201,18 +238,16 @@ const Card = ({ children }) => (
     initial={{ opacity:0, y:20 }}
     whileInView={{ opacity:1, y:0 }}
     viewport={{ once:true }}
-    className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 
-               shadow-[0_0_25px_rgba(255,255,255,0.05)] backdrop-blur-md 
-               hover:border-[rgb(70,135,145)] hover:shadow-[0_0_25px_rgba(70,135,145,0.35)]
-               transition-all duration-300"
+    className="surface-interactive p-6 sm:p-8 backdrop-blur-md"
   >
     {children}
   </motion.div>
 );
 
 const SkillBadge = ({ children }) => (
-  <div className="text-center bg-white/5 border border-white/10 py-3 rounded-xl 
-                  hover:border-[rgb(70,135,145)] transition shadow-sm text-sm sm:text-base">
+  <div className="text-center surface rounded-lg px-4 py-3 text-sm text-mist-300
+                  transition duration-200 ease-soft
+                  hover:-translate-y-0.5 hover:border-accent-500/40 hover:text-mist-50">
     {children}
   </div>
 );

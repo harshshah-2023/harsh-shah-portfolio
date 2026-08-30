@@ -1,17 +1,16 @@
-import React from 'react'
 
 const QuoteSeaction = () => {
     return (
-        <div className="bg-[#1a1a1a] flex items-center justify-center h-96 px-4">
-        <div className="text-center max-w-2xl">
-          <p className="text-gray-100 italic text-base md:text-lg leading-relaxed">
-            “Great software isn’t built with lines of code, it’s built with lines of thought. 
-            The way we think shapes what we create and what we create shapes the world.”
+        <div className="bg-ink-850 border-y border-white/[0.06] flex items-center justify-center h-96 px-6">
+        <div className="text-center max-w-measure">
+          <p className="text-mist-200 italic text-lg md:text-xl font-light">
+            &ldquo;Great software isn&rsquo;t built with lines of code, it&rsquo;s built with lines of thought.
+            The way we think shapes what we create and what we create shapes the world.&rdquo;
           </p>
-          <div className="my-6 flex justify-center">
-            <span className="inline-block w-6 h-[2px] bg-red-500"></span>
+          <div className="my-8 flex justify-center">
+            <span className="inline-block w-8 h-px bg-accent-500"></span>
           </div>
-          <p className="text-white font-semibold text-sm tracking-wide">
+          <p className="text-mist-400 font-medium text-xs uppercase tracking-[0.18em]">
             Harsh Shah
           </p>
         </div>

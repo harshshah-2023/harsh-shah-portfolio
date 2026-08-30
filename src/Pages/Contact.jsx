@@ -1,158 +1,324 @@
-import React, { useState } from "react";
-import emailjs from "@emailjs/browser";
-import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import {
+  CONTACT_EMAIL,
+  buildMailtoFallback,
+  sendContactMessage,
+  validateContactForm,
+} from "../lib/contactService";
+
+const EMPTY_FORM = { name: "", email: "", subject: "", message: "" };
+const IDLE = { state: "idle", msg: "" };
 
 export default function ContactUs() {
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [status, setStatus] = useState(IDLE);
 
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
-  const [status, setStatus] = useState({ loading: false, success: null, msg: "" });
+  // Bots fill every input they find; humans never see this one.
+  const honeypotRef = useRef("");
+  const firstFieldRef = useRef(null);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    // Clear a field's error as soon as the visitor starts fixing it.
+    setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
+  }, []);
+
+  const handleBlur = useCallback((e) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setForm((current) => {
+      const fieldErrors = validateContactForm(current);
+      setErrors((prev) => ({ ...prev, [name]: fieldErrors[name] }));
+      return current;
+    });
+  }, []);
+
+  const mailtoHref = useMemo(() => buildMailtoFallback(form), [form]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus({ loading: true, success: null, msg: "" });
+    if (status.state === "sending") return;
 
-    emailjs
-      .send(
-        "service_7zp1fmr",
-        "template_khi9en5",
-        {
-          name: form.name,
-          email: form.email,
-          subject: form.subject,
-          message: form.message,
-        },
-        "dQHgsyU-EDyjLUEBS"
-      )
-      .then(() => {
-        setStatus({ loading: false, success: true, msg: "Message sent successfully!" });
-        setForm({ name: "", email: "", subject: "", message: "" });
-      })
-      .catch(() =>
-        setStatus({ loading: false, success: false, msg: "Message failed, try again later." })
-      );
+    if (honeypotRef.current) {
+      // Silently pretend it worked - no feedback for the bot to learn from.
+      setForm(EMPTY_FORM);
+      setStatus({ state: "success", msg: "Message sent. I will get back to you shortly." });
+      return;
+    }
+
+    const nextErrors = validateContactForm(form);
+    setErrors(nextErrors);
+    setTouched({ name: true, email: true, subject: true, message: true });
+
+    if (Object.keys(nextErrors).length > 0) {
+      setStatus({ state: "error", msg: "Please fix the highlighted fields." });
+      firstFieldRef.current?.focus();
+      return;
+    }
+
+    setStatus({ state: "sending", msg: "" });
+    const result = await sendContactMessage(form);
+
+    if (result.ok) {
+      setForm(EMPTY_FORM);
+      setTouched({});
+      setErrors({});
+      setStatus({
+        state: "success",
+        msg: "Message sent. I will get back to you shortly.",
+      });
+    } else {
+      setStatus({ state: "error", msg: result.message, showFallback: true });
+    }
   };
 
+  const fieldProps = (name) => ({
+    name,
+    value: form[name],
+    onChange: handleChange,
+    onBlur: handleBlur,
+    error: touched[name] ? errors[name] : undefined,
+  });
+
+  const sending = status.state === "sending";
+
   return (
-    <section className="relative bg-gradient-to-b from-black via-gray-900 to-gray-800 py-20 px-6 md:px-14 xl:px-32">
+    <section className="relative bg-gradient-to-b from-ink-950 via-ink-900 to-ink-850 py-24 px-6 md:px-16 xl:px-24 overflow-hidden">
+      {/* Ambient glow. Rendered as a radial gradient rather than a huge blur()
+          filter - a 140px blur forces a full-viewport repaint on every scroll
+          frame and was the main source of jank on this page. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-16 top-0 w-[450px] h-[450px] rounded-full opacity-50"
+        style={{ background: "radial-gradient(circle, rgba(70,135,145,0.34) 0%, transparent 70%)" }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 bottom-0 w-[430px] h-[430px] rounded-full opacity-50"
+        style={{ background: "radial-gradient(circle, rgba(45,89,97,0.5) 0%, transparent 70%)" }}
+      />
 
-      {/* Glowing Blurs */}
-      <div className="pointer-events-none absolute -left-16 top-0 w-[350px] sm:w-[450px] h-[450px] bg-[#4ee4cb44] blur-[140px]" />
-      <div className="pointer-events-none absolute right-0 bottom-0 w-[350px] sm:w-[430px] h-[430px] bg-[#5b36ff33] blur-[150px]" />
-
-      {/* MAIN GRID */}
-      <div className="max-w-7xl mx-auto grid gap-12 md:grid-cols-2 items-start text-white">
-
+      <div className="relative max-w-7xl mx-auto grid gap-16 md:grid-cols-2 items-start">
         {/* LEFT INFO PANEL */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: .7 }}
+          transition={{ duration: 0.5 }}
           className="text-center md:text-left px-2"
         >
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
-            Let’s <span className="text-teal-400">Connect.</span>
+            Let&rsquo;s <span className="text-accent-500">Connect.</span>
           </h1>
 
-          <p className="text-gray-300 mt-3 sm:mt-4 max-w-md mx-auto md:mx-0 text-base sm:text-lg">
-           Whether it’s work, collaboration, or an idea worth exploring 
-my inbox is open
+          <p className="text-mist-400 mt-6 max-w-measure-sm mx-auto md:mx-0 text-base sm:text-lg">
+            Whether it&rsquo;s work, collaboration, or an idea worth exploring &mdash; my inbox is open.
           </p>
 
-          {/* Info Cards */}
-          <div className="mt-10 grid gap-4 max-w-sm mx-auto md:mx-0">
-            <InfoCard icon={<Mail />} title="Email" value="harshshah9848@gmail.com" link="mailto:harshshah9848@gmail.com" />
-            <InfoCard icon={<Phone />} title="Phone" value="Available on request" />
-            <InfoCard icon={<MapPin />} title="Location" value="India — Remote Friendly" />
-           
+          <div className="mt-12 grid gap-4 max-w-sm mx-auto md:mx-0">
+            <InfoCard
+              icon={<Mail aria-hidden="true" />}
+              title="Email"
+              value={CONTACT_EMAIL}
+              link={`mailto:${CONTACT_EMAIL}`}
+            />
+            <InfoCard icon={<Phone aria-hidden="true" />} title="Phone" value="Available on request" />
+            <InfoCard icon={<MapPin aria-hidden="true" />} title="Location" value="India — Remote Friendly" />
           </div>
 
-          {/* Social Icons */}
-          <div className="flex justify-center md:justify-start gap-4 mt-8">
-            <Social icon={<FaGithub />} link="https://github.com/harshshah-2023" />
-            <Social icon={<FaLinkedin />} link="https://www.linkedin.com/in/harsh-shah-9848hs" />
-            <Social icon={<FaEnvelope />} link="mailto:harshshah9848@gmail.com" />
+          <div className="flex justify-center md:justify-start gap-2 mt-8">
+            <Social label="GitHub" icon={<FaGithub />} link="https://github.com/harshshah-2023" />
+            <Social label="LinkedIn" icon={<FaLinkedin />} link="https://www.linkedin.com/in/harsh-shah-9848hs" />
+            <Social label="Email" icon={<FaEnvelope />} link={`mailto:${CONTACT_EMAIL}`} />
           </div>
         </motion.div>
 
         {/* FORM PANEL */}
         <motion.form
           onSubmit={handleSubmit}
-          initial={{ opacity: 0, x: 30 }}
+          noValidate
+          initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: .7 }}
-          className="bg-gray-900/60 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-gray-700 shadow-2xl max-w-lg w-full mx-auto"
+          transition={{ duration: 0.5 }}
+          className="surface rounded-2xl bg-white/[0.04] backdrop-blur-xl p-6 sm:p-8 shadow-e4 max-w-lg w-full mx-auto"
         >
           <h2 className="text-2xl sm:text-3xl font-semibold">Send Message</h2>
-          <p className="text-gray-400 text-sm mt-1 mb-6">I usually reply within a few hours.</p>
+          <p className="text-mist-500 text-sm mt-2 mb-8">I usually reply within a few hours.</p>
 
-          <Input label="Name" name="name" value={form.name} onChange={handleChange} />
-          <Input label="Email" name="email" value={form.email} onChange={handleChange} type="email" />
-          <Input label="Subject" name="subject" value={form.subject} onChange={handleChange} />
-          <Textarea label="Message" name="message" value={form.message} onChange={handleChange} />
+          <Input label="Name" autoComplete="name" {...fieldProps("name")} inputRef={firstFieldRef} />
+          <Input label="Email" type="email" autoComplete="email" {...fieldProps("email")} />
+          <Input label="Subject" {...fieldProps("subject")} />
+          <Textarea label="Message" {...fieldProps("message")} />
+
+          {/* Honeypot - hidden from users and assistive tech, tempting to bots. */}
+          <div className="hidden" aria-hidden="true">
+            <label htmlFor="company-website">Company website</label>
+            <input
+              id="company-website"
+              name="company-website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              onChange={(e) => {
+                honeypotRef.current = e.target.value;
+              }}
+            />
+          </div>
 
           <button
             type="submit"
-            disabled={status.loading}
-            className="w-full mt-4 flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-400 text-black font-semibold py-3 rounded-lg text-lg transition disabled:opacity-60"
+            disabled={sending}
+            className="w-full mt-8 flex items-center justify-center gap-2 rounded-lg
+                       bg-accent-500 py-4 text-base font-semibold text-ink-950 shadow-glow
+                       transition duration-200 ease-soft
+                       hover:-translate-y-0.5 hover:bg-accent-400 hover:shadow-glow-lg
+                       disabled:opacity-60 disabled:cursor-not-allowed
+                       disabled:hover:translate-y-0 disabled:hover:shadow-glow"
           >
-            <Send size={18} />
-            {status.loading ? "Sending..." : "Send Message"}
+            {sending ? (
+              <span
+                className="w-[18px] h-[18px] rounded-full border-2 border-black/30 border-t-black animate-spin"
+                aria-hidden="true"
+              />
+            ) : (
+              <Send size={18} aria-hidden="true" />
+            )}
+            {sending ? "Sending..." : "Send Message"}
           </button>
 
-          {/* STATUS MESSAGE */}
-          <AnimatePresence>
-            {status.msg && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className={`mt-4 p-3 rounded-lg text-sm text-center 
-                ${status.success ? "bg-green-700/40 text-green-300" : "bg-red-700/40 text-red-300"}`}
-              >
-                {status.msg}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <div aria-live="polite" role="status">
+            <AnimatePresence>
+              {status.msg && (
+                <motion.div
+                  key={status.msg}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  className={`mt-6 p-4 rounded-lg border text-sm flex items-start gap-2 ${
+                    status.state === "success"
+                      ? "bg-emerald-500/10 border-emerald-500/25 text-emerald-200"
+                      : "bg-red-500/10 border-red-500/25 text-red-200"
+                  }`}
+                >
+                  {status.state === "success" ? (
+                    <CheckCircle2 size={18} className="shrink-0 mt-[1px]" aria-hidden="true" />
+                  ) : (
+                    <AlertCircle size={18} className="shrink-0 mt-[1px]" aria-hidden="true" />
+                  )}
+                  <span>
+                    {status.msg}
+                    {status.showFallback && (
+                      <>
+                        {" "}
+                        <a href={mailtoHref} className="underline underline-offset-2 font-medium hover:text-mist-50">
+                          Send it by email instead
+                        </a>
+                        .
+                      </>
+                    )}
+                  </span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.form>
-
       </div>
     </section>
   );
 }
 
 /* ========== COMPONENTS ========== */
-const InfoCard = ({ icon, title, value, link }) => (
-  <a href={link} target="_blank" rel="noreferrer"
-    className="flex gap-4 items-center group transition hover:-translate-y-1">
-    <div className="p-3 rounded-xl bg-gray-800 border border-gray-700">{icon}</div>
-    <div>
-      <p className="text-gray-400 text-sm">{title}</p>
-      <p className="font-medium group-hover:text-teal-400">{value}</p>
-    </div>
-  </a>
-);
 
-const Social = ({ icon, link }) => (
-  <a href={link} target="_blank"
-    className="p-3 rounded-lg bg-gray-800 border border-gray-700 hover:bg-teal-500 hover:text-black transition">
+const InfoCard = ({ icon, title, value, link }) => {
+  const content = (
+    <>
+      <div className="p-3 rounded-lg bg-white/[0.04] border border-white/[0.07] text-accent-400
+                      transition duration-200 group-hover:border-accent-500/40">{icon}</div>
+      <div>
+        <p className="text-mist-500 text-xs font-medium uppercase tracking-[0.12em]">{title}</p>
+        <p className="mt-1 font-medium text-mist-200 transition duration-200 group-hover:text-accent-300">{value}</p>
+      </div>
+    </>
+  );
+
+  const className = "flex gap-4 items-center group transition duration-200 ease-soft hover:-translate-y-0.5 text-left";
+
+  // Cards without a link were rendering as <a href={undefined}>, a focusable
+  // no-op link. Render a plain div in that case.
+  return link ? (
+    <a href={link} className={className}>
+      {content}
+    </a>
+  ) : (
+    <div className={className}>{content}</div>
+  );
+};
+
+const Social = ({ icon, link, label }) => (
+  <a
+    href={link}
+    aria-label={label}
+    target={link.startsWith("mailto:") ? undefined : "_blank"}
+    rel="noopener noreferrer"
+    className="p-3 rounded-lg border border-white/[0.07] bg-white/[0.04] text-mist-400
+               shadow-e1 transition duration-200 ease-soft
+               hover:-translate-y-0.5 hover:border-accent-500/40 hover:text-accent-300 hover:shadow-glow"
+  >
     {icon}
   </a>
 );
 
-const Input = ({ label, ...props }) => (
-  <div className="mb-4">
-    <label className="text-sm text-gray-400">{label}</label>
-    <input {...props} className="w-full mt-1 p-3 rounded-lg bg-gray-800 border border-gray-700 text-sm focus:ring-2 focus:ring-teal-400 outline-none" />
+const Input = ({ label, name, error, inputRef, ...props }) => (
+  <div className="mb-6">
+    <label htmlFor={name} className="text-xs font-medium uppercase tracking-[0.12em] text-mist-500">
+      {label}
+    </label>
+    <input
+      {...props}
+      id={name}
+      name={name}
+      ref={inputRef}
+      aria-invalid={error ? "true" : undefined}
+      aria-describedby={error ? `${name}-error` : undefined}
+      className={`w-full mt-2 px-4 py-3 rounded-lg bg-ink-800/80 border text-sm text-mist-100
+        placeholder:text-mist-600 outline-none transition duration-200
+        focus:border-accent-500/50 focus:bg-ink-800 focus:ring-2 focus:ring-accent-500/30
+        ${error ? "border-red-500/60" : "border-white/[0.08] hover:border-white/[0.14]"}`}
+    />
+    {error && (
+      <p id={`${name}-error`} className="text-red-300 text-xs mt-2">
+        {error}
+      </p>
+    )}
   </div>
 );
 
-const Textarea = ({ label, ...props }) => (
-  <div className="mb-4">
-    <label className="text-sm text-gray-400">{label}</label>
-    <textarea {...props} rows={6} className="w-full mt-1 p-3 rounded-lg bg-gray-800 border border-gray-700 text-sm focus:ring-2 focus:ring-teal-400 outline-none" />
+const Textarea = ({ label, name, error, ...props }) => (
+  <div className="mb-6">
+    <label htmlFor={name} className="text-xs font-medium uppercase tracking-[0.12em] text-mist-500">
+      {label}
+    </label>
+    <textarea
+      {...props}
+      id={name}
+      name={name}
+      rows={6}
+      aria-invalid={error ? "true" : undefined}
+      aria-describedby={error ? `${name}-error` : undefined}
+      className={`w-full mt-2 px-4 py-3 rounded-lg bg-ink-800/80 border text-sm text-mist-100
+        placeholder:text-mist-600 outline-none transition duration-200
+        focus:border-accent-500/50 focus:bg-ink-800 focus:ring-2 focus:ring-accent-500/30
+        ${error ? "border-red-500/60" : "border-white/[0.08] hover:border-white/[0.14]"}`}
+    />
+    {error && (
+      <p id={`${name}-error`} className="text-red-300 text-xs mt-2">
+        {error}
+      </p>
+    )}
   </div>
 );
