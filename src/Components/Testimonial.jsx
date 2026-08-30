@@ -1,40 +1,39 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { Star, Quote, Play, Sparkles, ArrowRight } from "lucide-react";
+import { Star, Quote, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+
+const TESTIMONIALS = [
+  {
+    quote:
+      "A rare full-stack developer with the ability to design, build, deploy, scale and optimize end-to-end systems — including AI-enabled automation.",
+    name: "Dr. Allan Matthews",
+    role: "Director of Engineering",
+    company: "NeuraSoft Innovations",
+  },
+  {
+    quote:
+      "Brings both system thinking & creativity. Delivered a product that scaled 10x traffic without infra expansion. Outstanding engineering clarity.",
+    name: "Priya Desai",
+    role: "VP — Platform Architecture",
+    company: "CloudMatrix Labs",
+  },
+  {
+    quote:
+      "AI + Web + DevOps — this level of hybrid thinking is extremely hard to find in early-career engineers. Future tech leader without question.",
+    name: "Rohit Talreja",
+    role: "CTO",
+    company: "CYBERX AI",
+  },
+];
 
 export default function TestimonialShowcase() {
   const [index, setIndex] = useState(0);
 
-  const testimonials = [
-    {
-      quote:
-        "A rare full-stack developer with the ability to design, build, deploy, scale and optimize end-to-end systems — including AI-enabled automation.",
-      name: "Dr. Allan Matthews",
-      role: "Director of Engineering",
-      company: "NeuraSoft Innovations",
-      video: "https://www.w3schools.com/html/mov_bbb.mp4",
-    },
-    {
-      quote:
-        "Brings both system thinking & creativity. Delivered a product that scaled 10x traffic without infra expansion. Outstanding engineering clarity.",
-      name: "Priya Desai",
-      role: "VP — Platform Architecture",
-      company: "CloudMatrix Labs",
-      video: "https://www.w3schools.com/html/movie.mp4",
-    },
-    {
-      quote:
-        "AI + Web + DevOps — this level of hybrid thinking is extremely hard to find in early-career engineers. Future tech leader without question.",
-      name: "Rohit Talreja",
-      role: "CTO",
-      company: "CYBERX AI",
-      video: "https://www.w3schools.com/html/mov_bbb.mp4",
-    },
-  ];
 
   useEffect(() => {
     const auto = setInterval(() => {
-      setIndex((prev) => (prev + 1) % testimonials.length);
+      setIndex((prev) => (prev + 1) % TESTIMONIALS.length);
     }, 6500);
     return () => clearInterval(auto);
   }, []);
@@ -43,9 +42,11 @@ export default function TestimonialShowcase() {
     <div className="min-h-screen w-full bg-gradient-to-b from-black via-gray-900 to-black text-white px-6 md:px-20 py-24 relative overflow-hidden">
 
       {/* ---- Ambient Glow Background ---- */}
-      <div className="absolute inset-0 opacity-[0.12] pointer-events-none">
-        <div className="absolute inset-0 rounded-full blur-[180px] bg-[rgb(70,135,145)]"></div>
-      </div>
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 opacity-[0.12] pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgb(70,135,145) 0%, transparent 70%)" }}
+      />
 
       {/* ---- Header ---- */}
       <motion.div
@@ -127,30 +128,33 @@ export default function TestimonialShowcase() {
         <div className="lg:w-1/2 space-y-6">
           <Quote className="w-10 h-10 text-[rgb(70,135,145)] opacity-50" />
           <p className="text-2xl md:text-3xl font-medium leading-normal">
-            {testimonials[index].quote}
+            {TESTIMONIALS[index].quote}
           </p>
 
           <div>
-            <p className="text-xl font-semibold">{testimonials[index].name}</p>
-            <p className="text-[rgb(70,135,145)] font-medium">{testimonials[index].role}</p>
-            <p className="text-gray-400 text-sm">{testimonials[index].company}</p>
+            <p className="text-xl font-semibold">{TESTIMONIALS[index].name}</p>
+            <p className="text-[rgb(70,135,145)] font-medium">{TESTIMONIALS[index].role}</p>
+            <p className="text-gray-400 text-sm">{TESTIMONIALS[index].company}</p>
           </div>
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            className="flex items-center gap-2 px-6 py-3 rounded-full border border-[rgb(70,135,145)] 
+          {/* Was a dead <button> with no handler; now routes to the resume. */}
+          <Link
+            to="/resume"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-[rgb(70,135,145)]
                        hover:bg-[rgb(70,135,145)]/80 transition-all font-semibold"
           >
-            View Full Experience <ArrowRight className="w-5 h-5" />
-          </motion.button>
+            View Full Experience <ArrowRight className="w-5 h-5" aria-hidden="true" />
+          </Link>
         </div>
       </motion.div>
 
       {/* ---- Slide Dots ---- */}
       <div className="flex gap-3 justify-center mt-10">
-        {testimonials.map((_, i) => (
+        {TESTIMONIALS.map((_, i) => (
           <button
             key={i}
+            type="button"
+            aria-label={`Show testimonial ${i + 1}`}
             onClick={() => setIndex(i)}
             className={`w-3 h-3 rounded-full transition-all ${
               i === index ? "bg-[rgb(70,135,145)] scale-125" : "bg-white/30 hover:bg-white/60"

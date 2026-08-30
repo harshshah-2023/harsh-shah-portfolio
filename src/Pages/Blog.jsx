@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, X } from "lucide-react";
 
@@ -136,34 +136,35 @@ You're not competing with others — you're evolving from yesterday.
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B0D0F] text-gray-200 px-6 md:px-20 py-36 font-[Inter]">
+    <div className="min-h-screen bg-ink-900 px-6 md:px-16 py-32 font-sans">
 
       {/* --- Header --- */}
-      <div className="text-center max-w-3xl mx-auto">
-        <h1 className="text-5xl font-bold tracking-tight text-white">Blog • Thoughts • Engineering</h1>
-        <p className="text-gray-400 mt-4 text-lg leading-relaxed">
+      <div className="text-center max-w-measure-lg mx-auto">
+        <h1 className="text-4xl sm:text-5xl font-bold">Blog • Thoughts • Engineering</h1>
+        <p className="text-mist-400 mt-6 text-lg font-light">
           Ideas that shape software written from experience, failure, systems and long nights of debugging.
         </p>
       </div>
 
       {/* --- Blog Grid --- */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16 max-w-7xl mx-auto">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16 max-w-7xl mx-auto">
         {blogPosts.map(post => (
           <motion.div
             key={post.id}
             onClick={() => setSelected(post)}
-            whileHover={{ y: -6, scale: 1.03 }}
-            transition={{ duration: 0.25 }}
-            className="bg-[#121416] border border-gray-800 hover:border-gray-600 
-                       rounded-2xl shadow-md hover:shadow-2xl p-7 cursor-pointer"
+            whileHover={{ y: -2 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="group surface p-8 h-full flex flex-col cursor-pointer transition duration-200
+                       hover:border-accent-500/40 hover:bg-white/[0.05] hover:shadow-e3"
           >
-            <p className="text-xs tracking-wide text-gray-500">{post.date} • {post.read}</p>
-            <h3 className="mt-3 text-xl font-semibold leading-snug text-white">{post.title}</h3>
-            <p className="text-gray-400 mt-3 line-clamp-3 text-[15px]">{post.content}</p>
+            <p className="text-xs uppercase tracking-[0.12em] text-mist-500">{post.date} • {post.read}</p>
+            <h3 className="mt-4 text-xl font-semibold">{post.title}</h3>
+            <p className="mt-4 text-sm text-mist-400 line-clamp-3">{post.content}</p>
 
-            <button className="flex gap-2 items-center text-gray-300 font-medium mt-5 hover:text-white">
-              Read Article <ArrowRight size={18} />
-            </button>
+            <span className="mt-auto pt-6 inline-flex gap-2 items-center text-sm font-medium text-accent-400
+                             transition duration-200 group-hover:gap-3 group-hover:text-accent-300">
+              Read Article <ArrowRight size={16} aria-hidden="true" />
+            </span>
           </motion.div>
         ))}
       </div>
@@ -173,20 +174,21 @@ You're not competing with others — you're evolving from yesterday.
         {selected && (
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-lg flex items-center justify-center px-5 z-50"
+            className="fixed inset-0 bg-ink-950/70 backdrop-blur-lg flex items-center justify-center px-6 z-50"
             onClick={() => setSelected(null)}
           >
             <motion.div
-              initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
-              className="bg-[#15171A] max-w-2xl p-10 rounded-3xl shadow-2xl border border-gray-800 w-full"
+              initial={{ scale: 0.96 }} animate={{ scale: 1 }} exit={{ scale: 0.96 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="bg-ink-850 max-w-2xl p-8 sm:p-12 rounded-2xl shadow-e4 border border-white/[0.08] w-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-semibold text-white">{selected.title}</h2>
-                <X size={26} className="cursor-pointer text-gray-400 hover:text-white" onClick={() => setSelected(null)} />
+              <div className="flex justify-between items-start gap-6 mb-8">
+                <h2 className="text-2xl sm:text-3xl font-semibold">{selected.title}</h2>
+                <X size={24} className="shrink-0 cursor-pointer text-mist-500 transition hover:text-mist-50" onClick={() => setSelected(null)} />
               </div>
 
-              <p className="whitespace-pre-line leading-relaxed text-gray-300 text-[15.5px]">{selected.content}</p>
+              <p className="whitespace-pre-line text-mist-300 text-base max-w-measure">{selected.content}</p>
             </motion.div>
           </motion.div>
         )}

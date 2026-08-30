@@ -1,31 +1,33 @@
 import { Github, Linkedin, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0C0F12] text-gray-300 border-t border-white/10 pt-16 pb-10">
+    <footer className="bg-ink-950 text-mist-300 border-t border-white/[0.06] pt-24 pb-10">
 
       {/* ==== TOP GRID ==== */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 
-                      grid gap-16 sm:grid-cols-2 lg:grid-cols-3 
+      <div className="max-w-7xl mx-auto px-6 md:px-8
+                      grid gap-16 sm:grid-cols-2 lg:grid-cols-3
                       text-center sm:text-left">
 
         {/* INTRO SECTION */}
-        <div className="space-y-4">
-          <h2 className="text-3xl font-semibold text-white tracking-tight">
-            Harsh <span className="text-[rgb(70,135,145)]">Shah</span>
+        <div>
+          <h2 className="text-3xl font-semibold text-mist-50">
+            Harsh <span className="text-accent-500">Shah</span>
           </h2>
 
-          <p className="text-[14.5px] text-gray-400 leading-relaxed max-w-sm mx-auto sm:mx-0">
-            Software Engineer • Full-Stack • DevOps  
-            Building scalable systems & intelligent AI-powered products.
+          <p className="mt-4 text-sm text-mist-400 max-w-measure-sm mx-auto sm:mx-0">
+            Software Product Engineer • Full-Stack • DevOps
+            <br />
+            Building scalable systems &amp; intelligent AI-powered products.
           </p>
 
           {/* Tags */}
-          <div className="flex justify-center sm:justify-start gap-2 flex-wrap pt-2">
-            {["Full-Stack", "DevOps", "Cloud", "AI/ML"].map((tag,i) => (
+          <div className="flex justify-center sm:justify-start gap-2 flex-wrap mt-6">
+            {["Product Engineering", "Full-Stack", "DevOps", "Cloud", "AI/ML"].map((tag,i) => (
               <span key={i}
-                className="px-3 py-[6px] text-[12px] rounded-full border border-white/10
-                           bg-white/[0.05] text-gray-200 shadow-sm">
+                className="px-3 py-1 text-xs rounded-full border border-white/[0.07]
+                           bg-white/[0.04] text-mist-300">
                 {tag}
               </span>
             ))}
@@ -33,13 +35,13 @@ export default function Footer() {
         </div>
 
         {/* NAVIGATION */}
-        <div className="space-y-4">
-          <h3 className="font-semibold text-white text-lg mb-2">
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-mist-50">
             Navigation
-            <span className="block w-10 h-1 mt-1 mx-auto sm:mx-0 rounded-full bg-[rgb(70,135,145)]"></span>
+            <span className="block w-8 h-px mt-2 mx-auto sm:mx-0 rounded-full bg-accent-500"></span>
           </h3>
 
-          <ul className="space-y-3 text-[15px] font-light">
+          <ul className="mt-6 space-y-2 text-sm font-light">
             {[
               {name:"Home",href:"/"},
               {name:"Projects",href:"/projects"},
@@ -48,38 +50,43 @@ export default function Footer() {
               {name:"Contact",href:"/contact"}
             ].map((nav,i)=>(
               <li key={i}>
-                <a href={nav.href}
-                   className="block hover:text-white hover:translate-x-1 transition-all duration-200">
+                <Link to={nav.href}
+                   className="inline-block py-1 text-mist-400 hover:text-mist-50
+                              hover:translate-x-0.5 transition duration-200 ease-soft">
                   {nav.name}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
         </div>
 
         {/* CONNECT */}
-        <div className="space-y-4">
-          <h3 className="font-semibold text-white text-lg">
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-mist-50">
             Connect
-            <span className="block w-10 h-1 mt-1 mx-auto sm:mx-0 rounded-full bg-[rgb(70,135,145)]"></span>
+            <span className="block w-8 h-px mt-2 mx-auto sm:mx-0 rounded-full bg-accent-500"></span>
           </h3>
 
-          <p className="text-[15px] text-gray-400 max-w-sm mx-auto sm:mx-0 leading-relaxed">
-            Available for roles, collaborations & freelance development.
+          <p className="mt-6 text-sm text-mist-400 max-w-measure-sm mx-auto sm:mx-0">
+            Available for roles, collaborations &amp; freelance development.
           </p>
 
           {/* Social Buttons — Center on Mobile, Left on Desktop */}
-          <div className="flex justify-center sm:justify-start gap-4 mt-4 flex-wrap">
+          <div className="flex justify-center sm:justify-start gap-2 mt-6 flex-wrap">
             {[
-              {icon:Github,href:"https://github.com/harshshah-2023"},
-              {icon:Linkedin,href:"https://www.linkedin.com/in/harsh-shah-9848hs"},
-              {icon:Mail,href:"mailto:harshshah9848@gmail.com"}
+              {icon:Github,label:"GitHub",href:"https://github.com/harshshah-2023"},
+              {icon:Linkedin,label:"LinkedIn",href:"https://www.linkedin.com/in/harsh-shah-9848hs"},
+              {icon:Mail,label:"Email",href:"mailto:harshshah9848@gmail.com"}
             ].map((social,i)=>(
-              <a key={i} href={social.href} target="_blank" rel="noopener noreferrer"
-                className="p-3 rounded-lg border border-white/10 bg-white/[0.05]
-                           hover:bg-white/[0.12] hover:border-[rgb(70,135,145)]/60
-                           transition-all duration-300 shadow-md hover:shadow-[0_0_10px_rgba(70,135,145,.4)]">
-                <social.icon size={22} className="text-gray-300 hover:text-white"/>
+              <a key={i} href={social.href} aria-label={social.label}
+                target={social.href.startsWith("mailto:") ? undefined : "_blank"}
+                rel="noopener noreferrer"
+                className="p-3 rounded-lg border border-white/[0.07] bg-white/[0.04]
+                           text-mist-400 shadow-e1
+                           transition duration-200 ease-soft
+                           hover:-translate-y-0.5 hover:border-accent-500/40
+                           hover:bg-white/[0.07] hover:text-mist-50 hover:shadow-glow">
+                <social.icon size={20} aria-hidden="true" />
               </a>
             ))}
           </div>
@@ -88,10 +95,11 @@ export default function Footer() {
       </div>
 
       {/* ==== BOTTOM COPYRIGHT ==== */}
-      <div className="mt-14 pt-6 border-t border-white/10 text-center text-sm text-gray-500">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 mt-24 pt-8 border-t border-white/[0.06]
+                      text-center text-xs text-mist-500">
         © {new Date().getFullYear()} Harsh Shah — All Rights Reserved.
-        <p className="mt-2 text-[13px] text-gray-600">
-          Built with React + Tailwind • Made with ❤️ & consistency
+        <p className="mt-2 text-xs text-mist-600">
+          Built with React + Tailwind • Made with ❤️ &amp; consistency
         </p>
       </div>
     </footer>

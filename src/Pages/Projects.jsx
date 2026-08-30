@@ -1,9 +1,8 @@
-import React from 'react';
 import ProjectsGallery from '../Components/ProjectGallary/ProjectsGallery';
 
 const Projects = () => {
   return (
-    <div className='bg-black'>
+    <div className='bg-ink-900'>
    <ProjectsGallery/>
     </div>
   );
