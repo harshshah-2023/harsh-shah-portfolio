@@ -1,3 +1,11 @@
+// A colour backed by an RGB-channel CSS variable, so opacity modifiers
+// (`bg-ink-900/70`) keep working.
+const v = (name) => `rgb(var(--${name}) / <alpha-value>)`;
+
+// Shadow alpha scales with --shadow-k: full strength on dark surfaces,
+// lighter on the blog's light theme where black shadows read heavy.
+const a = (alpha) => `rgba(0,0,0,calc(${alpha} * var(--shadow-k, 1)))`;
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -12,32 +20,38 @@ export default {
          family as the brand accent; `mist` is the matching cool text
          ramp. `accent-500` is the existing brand colour, unchanged.
       ============================================================ */
+      // Values live in CSS variables (src/index.css) so a scope can swap the
+      // palette: the dark values below are the site default, and the blog
+      // switches to a light set via [data-theme="light"].
       colors: {
         ink: {
-          950: "#05080A", // deepest — page floor, hero wash
-          900: "#080C0F", // page background
-          850: "#0B1115", // alternating section background
-          800: "#101A1F", // card surface
-          750: "#152026", // raised surface / hover
-          700: "#1B282F", // strong divider, inset field
+          950: v("ink-950"), // deepest — page floor, hero wash
+          900: v("ink-900"), // page background
+          850: v("ink-850"), // alternating section background
+          800: v("ink-800"), // card surface
+          750: v("ink-750"), // raised surface / hover
+          700: v("ink-700"), // strong divider, inset field
         },
         mist: {
-          50: "#F5F8F9", // headings
-          100: "#E8EEF0",
-          200: "#D3DDE1", // emphasised body
-          300: "#B1C0C6", // body copy
-          400: "#98A8AF", // secondary
-          500: "#808F96", // captions / meta — >= 4.5:1 on every ink surface
-          600: "#717F85", // muted footnotes — >= 4.5:1 on ink-900/950
+          50: v("mist-50"), // headings
+          100: v("mist-100"),
+          200: v("mist-200"), // emphasised body
+          300: v("mist-300"), // body copy
+          400: v("mist-400"), // secondary
+          500: v("mist-500"), // captions / meta — >= 4.5:1 on every ink surface
+          600: v("mist-600"), // muted footnotes — >= 4.5:1 on ink-900/950
         },
         accent: {
-          200: "#A9D7DF",
-          300: "#80C1CC",
-          400: "#5DA4B1",
-          500: "#468791", // rgb(70,135,145) — brand, unchanged
-          600: "#3A717B",
-          700: "#2D5961",
+          200: v("accent-200"),
+          300: v("accent-300"),
+          400: v("accent-400"),
+          500: v("accent-500"), // rgb(70,135,145) — brand, unchanged
+          600: v("accent-600"),
+          700: v("accent-700"),
         },
+        // Hairlines and translucent fills: white on dark, near-black on light.
+        // Use as `border-edge/[0.08]`, `bg-edge/[0.03]`.
+        edge: v("edge"),
       },
 
       /* ============================================================
@@ -50,6 +64,16 @@ export default {
         sans: [
           "Inter", "ui-sans-serif", "system-ui", "-apple-system",
           "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif",
+        ],
+        // Long-form article body (blog). A text serif reads more easily
+        // than UI sans at paragraph length.
+        // Quoted inside the string: an unquoted family name containing a
+        // bare number ("Source Serif 4") is invalid CSS and gets dropped.
+        reading: [
+          '"Source Serif 4"', "Iowan Old Style", "Charter", "Georgia", "serif",
+        ],
+        mono: [
+          "JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace",
         ],
       },
       fontSize: {
@@ -78,10 +102,10 @@ export default {
          instead of one heavy blur.
       ============================================================ */
       boxShadow: {
-        e1: "0 1px 2px rgba(0,0,0,0.20), 0 1px 3px rgba(0,0,0,0.12)",
-        e2: "0 1px 2px rgba(0,0,0,0.20), 0 6px 16px -6px rgba(0,0,0,0.28)",
-        e3: "0 2px 4px rgba(0,0,0,0.22), 0 14px 34px -10px rgba(0,0,0,0.38)",
-        e4: "0 4px 8px rgba(0,0,0,0.24), 0 28px 64px -16px rgba(0,0,0,0.48)",
+        e1: `0 1px 2px ${a(0.2)}, 0 1px 3px ${a(0.12)}`,
+        e2: `0 1px 2px ${a(0.2)}, 0 6px 16px -6px ${a(0.28)}`,
+        e3: `0 2px 4px ${a(0.22)}, 0 14px 34px -10px ${a(0.38)}`,
+        e4: `0 4px 8px ${a(0.24)}, 0 28px 64px -16px ${a(0.48)}`,
         // Accent-tinted lift: a 1px ring reads as a crisp edge, the wide
         // layer as an ambient glow.
         glow: "0 0 0 1px rgba(70,135,145,0.26), 0 8px 26px -10px rgba(70,135,145,0.34)",

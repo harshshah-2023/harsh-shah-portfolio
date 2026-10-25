@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import ThemeSwitch from "./Blog/ThemeSwitch";
+import { isBlogPath } from "../blog/theme";
 
 const NAV_ITEMS = [
   { label: "Projects", to: "/projects" },
   { label: "Contact", to: "/contact" },
   { label: "About", to: "/about" },
-  { label: "Resume", to: "/resume" },
+  { label: "Behind the Build", to: "/behind-the-build" },
   { label: "Blog", to: "/blog" },
 ];
 
@@ -36,7 +38,14 @@ const Navbar = () => {
     };
   }, [open]);
 
-  const isActive = (to) => pathname.toLowerCase() === to;
+  // Nested routes (/blog/:slug) keep their section highlighted.
+  const isActive = (to) => {
+    const path = pathname.toLowerCase();
+    return path === to || path.startsWith(`${to}/`);
+  };
+
+  // The light/dark switch belongs to the blog section only.
+  const onBlog = isBlogPath(pathname.toLowerCase());
 
   return (
     <>
@@ -44,7 +53,7 @@ const Navbar = () => {
       <nav
         className="fixed top-0 left-0 w-full z-50 flex items-center justify-between
                    py-4 px-6 lg:px-8 backdrop-blur-xl bg-ink-950/70
-                   border-b border-white/[0.06]"
+                   border-b border-edge/[0.06]"
       >
         {/* LOGO */}
         <Link
@@ -80,19 +89,23 @@ const Navbar = () => {
               />
             </Link>
           ))}
+          {onBlog && <ThemeSwitch className="-my-1" />}
         </div>
 
-        {/* MOBILE MENU ICON */}
-        <button
-          type="button"
-          className="md:hidden -mr-2 p-2 rounded-lg text-mist-200 transition
-                     hover:bg-white/[0.06] hover:text-mist-50 active:scale-95"
-          aria-label="Open navigation menu"
-          aria-expanded={open}
-          onClick={() => setOpen(true)}
-        >
-          <Menu size={28} aria-hidden="true" />
-        </button>
+        {/* MOBILE: theme switch (blog only) + menu icon */}
+        <div className="md:hidden flex items-center gap-3">
+          {onBlog && <ThemeSwitch />}
+          <button
+            type="button"
+            className="-mr-2 p-2 rounded-lg text-mist-200 transition
+                       hover:bg-edge/[0.06] hover:text-mist-50 active:scale-95"
+            aria-label="Open navigation menu"
+            aria-expanded={open}
+            onClick={() => setOpen(true)}
+          >
+            <Menu size={28} aria-hidden="true" />
+          </button>
+        </div>
       </nav>
 
       {/* ================= FULLSCREEN MOBILE NAV ================= */}
@@ -109,7 +122,7 @@ const Navbar = () => {
             onClick={() => setOpen(false)}
             aria-label="Close navigation menu"
             className="absolute top-4 right-6 p-2 rounded-lg text-mist-400 transition
-                       hover:bg-white/[0.06] hover:text-accent-400 active:scale-95"
+                       hover:bg-edge/[0.06] hover:text-accent-400 active:scale-95"
           >
             <X size={28} aria-hidden="true" />
           </button>

@@ -27,14 +27,15 @@ const Home = () => {
             Welcome to my portfolio.
           </p>
 
-          <Link to="/projects">
-            <button className="mt-8 inline-flex items-center rounded-lg border border-white/20
+          <Link
+            to="/projects"
+            className="mt-8 inline-flex items-center rounded-lg border border-white/20
                        px-8 py-3 text-sm font-semibold tracking-[0.08em] text-mist-100
                        shadow-e2 transition duration-200 ease-soft
                        hover:-translate-y-0.5 hover:border-transparent
-                       hover:bg-accent-500 hover:text-ink-950 hover:shadow-glow-lg">
-              CHECKOUT MY WORK
-            </button>
+                       hover:bg-accent-500 hover:text-ink-950 hover:shadow-glow-lg"
+          >
+            CHECKOUT MY WORK
           </Link>
         </div>
 

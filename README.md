@@ -33,6 +33,7 @@ The site highlights my projects, technical expertise, and experience building **
 - Fast load times with Vite bundling and per-route chunks
 - Project showcase with real-world focus
 - Working contact form with validation and a mailto fallback
+- Markdown blog: drop a `.md` file in `content/blog/` to publish (see [BLOG_GUIDE.md](BLOG_GUIDE.md))
 - Optimized for desktop and mobile devices
 
 ---
@@ -40,12 +41,19 @@ The site highlights my projects, technical expertise, and experience building **
 ## 📂 Project Structure
 
 ```
+├── content/
+│   └── blog/                # one Markdown file per article
 ├── public/
+│   ├── blog/images/         # article covers and inline images
 │   ├── ProfilePic.webp
 │   └── _redirects
+├── tools/
+│   └── blog/                # Vite plugin: Markdown -> HTML, prerender, sitemap, RSS
 ├── src/
 │   ├── assets/
+│   ├── blog/                # post helpers, per-page <head> metadata
 │   ├── Components/
+│   │   ├── Blog/            # cards, TOC, reading progress, share, author bio
 │   │   ├── common/          # ScrollToTop, PageLoader, NotFound
 │   │   └── ProjectGallary/  # gallery, hero, modal, project data
 │   ├── Pages/
@@ -133,7 +141,15 @@ Failures surface the real EmailJS error in the UI and offer a pre-filled
 
 This is a client-side routed SPA, so the host must rewrite unknown paths to
 `index.html` or deep links like `/resume` return 404. `public/_redirects`
-(Render / Netlify) and `vercel.json` (Vercel) are both included.
+(Netlify-style) and `vercel.json` (Vercel) are both included; on Render the
+equivalent is a **Rewrite** rule `/*` → `/index.html` under the static site's
+*Redirects/Rewrites* settings.
+
+The blog is the exception: `npm run build` also writes real HTML files for
+`/blog` and every `/blog/<slug>` (as both `<slug>.html` and
+`<slug>/index.html`), with per-article titles, descriptions, canonical URLs,
+Open Graph tags and structured data, plus `sitemap.xml`, `rss.xml` and
+`robots.txt`. Hosts serve those files ahead of the SPA fallback.
 
 ---
 
@@ -154,6 +170,13 @@ Colour, type scale, spacing, elevation and motion are defined as tokens in
 - `ink-*` — cool-tinted background surfaces
 - `mist-*` — text ramp (all steps meet WCAG AA on every ink surface)
 - `accent-*` — brand accent, `accent-500` is `rgb(70,135,145)`
+- `edge` — hairlines and translucent fills (`border-edge/[0.08]`); white on dark, near-black on light
+
+Colour tokens are CSS variables defined in `src/index.css`. Dark is the site
+default; the blog section sets `<html data-theme="light">` (its default) or
+`"dark"` via the navbar switch (`src/blog/theme.js`), which swaps the whole
+palette. Use the tokens rather than raw `white/…` or hex values so components
+follow the theme.
 - `shadow-e1`–`e4` — multi-layer elevation; `shadow-glow` for accent lifts
 - `.surface` / `.surface-interactive` / `.eyebrow` — shared component classes
 
