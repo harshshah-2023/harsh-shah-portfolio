@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { SiNextdotjs, SiMongodb, SiDocker, SiKubernetes, SiTensorflow, SiTailwindcss } from "react-icons/si";
+import { FileDown } from "lucide-react";
 import ProfilePic from "../assets/ProfilePic-840.webp";
+import resumePDF from "../assets/fullStack_harshshah_resume.pdf";
 
 
 export default function About() {
@@ -30,7 +32,6 @@ export default function About() {
     loading="eager"
     fetchPriority="high"
     decoding="async"
-    sizes="(max-width:768px) 60vw, 30vw"
     className="w-full h-full object-cover brightness-[0.85] transition-all duration-700
                [@media(hover:hover)]:blur-sm [@media(hover:hover)]:group-hover:blur-0"
     alt="Portrait of Harsh Shah"
@@ -88,6 +89,18 @@ export default function About() {
 
 
           </div>
+
+          {/* The resume download that used to live on /resume (which now redirects here). */}
+          <a
+            id="resume"
+            href={resumePDF}
+            download="HarshShah_Resume.pdf"
+            className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-lg border border-accent-500/60
+                       text-sm font-semibold text-mist-100 shadow-e2 transition duration-200 ease-soft
+                       hover:-translate-y-0.5 hover:bg-accent-500 hover:text-ink-950 hover:shadow-glow-lg"
+          >
+            <FileDown size={18} aria-hidden="true" /> Download Resume
+          </a>
         </div>
       </section>
 

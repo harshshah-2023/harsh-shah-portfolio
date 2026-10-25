@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" role="img" aria-label="Retrieval-augmented generation pipeline">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1115"/>
+      <stop offset="1" stop-color="#152026"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.3" r="0.6">
+      <stop offset="0" stop-color="#468791" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#468791" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.04"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="800" fill="url(#bg)"/>
+  <rect width="1600" height="800" fill="url(#grid)"/>
+  <rect width="1600" height="800" fill="url(#glow)"/>
+  <g fill="none" stroke="#80C1CC" stroke-width="3" stroke-linecap="round">
+    <rect x="180" y="330" width="220" height="140" rx="20" stroke-opacity="0.7"/>
+    <rect x="560" y="250" width="220" height="140" rx="20" stroke-opacity="0.7"/>
+    <rect x="560" y="420" width="220" height="140" rx="20" stroke-opacity="0.7"/>
+    <rect x="940" y="330" width="220" height="140" rx="20"/>
+    <rect x="1300" y="360" width="120" height="80" rx="40" stroke-opacity="0.9"/>
+    <path d="M400 400 C480 400 480 320 560 320M400 400 C480 400 480 490 560 490M780 320 C860 320 860 400 940 400M780 490 C860 490 860 400 940 400M1160 400 H1300" stroke-opacity="0.5"/>
+  </g>
+  <g fill="#A9D7DF" font-family="Inter, Arial, sans-serif" font-size="26" text-anchor="middle" opacity="0.85">
+    <text x="290" y="410">Query</text><text x="670" y="330">Retrieve</text><text x="670" y="500">Re-rank</text><text x="1050" y="410">Generate</text>
+  </g>
+</svg>

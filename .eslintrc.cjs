@@ -11,6 +11,13 @@ module.exports = {
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
   plugins: ['react-refresh'],
+  overrides: [
+    // Build-time code (Vite config and the blog content pipeline) runs in Node.
+    {
+      files: ['vite.config.js', 'tools/**/*.js'],
+      env: { node: true, browser: false },
+    },
+  ],
   rules: {
     'react/jsx-no-target-blank': 'off',
     // Plain JSX project with no TypeScript layer - propTypes are not the

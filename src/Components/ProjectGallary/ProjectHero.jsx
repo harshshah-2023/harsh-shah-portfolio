@@ -11,7 +11,8 @@ const ProjectHero = ({ project, onInfo }) => {
           prioritise it - as a background-image it was found only after the
           stylesheet applied, delaying the largest paint on this page. */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <ProjectThumb project={project} hero />
+        {/* Keyed by project so a failed image doesn't stick to the next one. */}
+        <ProjectThumb key={project.id} project={project} hero />
         <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/85 to-ink-950/20"></div>
       </div>
 

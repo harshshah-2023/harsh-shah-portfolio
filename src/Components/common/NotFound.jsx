@@ -20,7 +20,7 @@ export default function NotFound() {
         </Link>
         <Link
           to="/projects"
-          className="px-8 py-3 rounded-lg border border-white/[0.14] text-mist-200 shadow-e2
+          className="px-8 py-3 rounded-lg border border-edge/[0.14] text-mist-200 shadow-e2
                      transition duration-200 ease-soft
                      hover:-translate-y-0.5 hover:border-accent-500/50 hover:text-mist-50 hover:shadow-e3"
         >

@@ -32,12 +32,9 @@ export default function ContactUs() {
   const handleBlur = useCallback((e) => {
     const { name } = e.target;
     setTouched((prev) => ({ ...prev, [name]: true }));
-    setForm((current) => {
-      const fieldErrors = validateContactForm(current);
-      setErrors((prev) => ({ ...prev, [name]: fieldErrors[name] }));
-      return current;
-    });
-  }, []);
+    const fieldErrors = validateContactForm(form);
+    setErrors((prev) => ({ ...prev, [name]: fieldErrors[name] }));
+  }, [form]);
 
   const mailtoHref = useMemo(() => buildMailtoFallback(form), [form]);
 

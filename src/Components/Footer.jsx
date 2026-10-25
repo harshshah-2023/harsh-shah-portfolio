@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-ink-950 text-mist-300 border-t border-white/[0.06] pt-24 pb-10">
+    <footer className="bg-ink-950 text-mist-300 border-t border-edge/[0.06] pt-24 pb-10">
 
       {/* ==== TOP GRID ==== */}
       <div className="max-w-7xl mx-auto px-6 md:px-8
@@ -26,8 +26,8 @@ export default function Footer() {
           <div className="flex justify-center sm:justify-start gap-2 flex-wrap mt-6">
             {["Product Engineering", "Full-Stack", "DevOps", "Cloud", "AI/ML"].map((tag,i) => (
               <span key={i}
-                className="px-3 py-1 text-xs rounded-full border border-white/[0.07]
-                           bg-white/[0.04] text-mist-300">
+                className="px-3 py-1 text-xs rounded-full border border-edge/[0.07]
+                           bg-edge/[0.04] text-mist-300">
                 {tag}
               </span>
             ))}
@@ -46,6 +46,7 @@ export default function Footer() {
               {name:"Home",href:"/"},
               {name:"Projects",href:"/projects"},
               {name:"About",href:"/about"},
+              {name:"Behind the Build",href:"/behind-the-build"},
               {name:"Blog",href:"/blog"},
               {name:"Contact",href:"/contact"}
             ].map((nav,i)=>(
@@ -81,11 +82,11 @@ export default function Footer() {
               <a key={i} href={social.href} aria-label={social.label}
                 target={social.href.startsWith("mailto:") ? undefined : "_blank"}
                 rel="noopener noreferrer"
-                className="p-3 rounded-lg border border-white/[0.07] bg-white/[0.04]
+                className="p-3 rounded-lg border border-edge/[0.07] bg-edge/[0.04]
                            text-mist-400 shadow-e1
                            transition duration-200 ease-soft
                            hover:-translate-y-0.5 hover:border-accent-500/40
-                           hover:bg-white/[0.07] hover:text-mist-50 hover:shadow-glow">
+                           hover:bg-edge/[0.07] hover:text-mist-50 hover:shadow-glow">
                 <social.icon size={20} aria-hidden="true" />
               </a>
             ))}
@@ -95,7 +96,7 @@ export default function Footer() {
       </div>
 
       {/* ==== BOTTOM COPYRIGHT ==== */}
-      <div className="max-w-7xl mx-auto px-6 md:px-8 mt-24 pt-8 border-t border-white/[0.06]
+      <div className="max-w-7xl mx-auto px-6 md:px-8 mt-24 pt-8 border-t border-edge/[0.06]
                       text-center text-xs text-mist-500">
         © {new Date().getFullYear()} Harsh Shah — All Rights Reserved.
         <p className="mt-2 text-xs text-mist-600">
